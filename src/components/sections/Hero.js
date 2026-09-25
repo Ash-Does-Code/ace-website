@@ -1,47 +1,146 @@
 "use client";
 
+import { useRef, useEffect } from "react";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+
+const ORBIT_RADIUS = 350; // half of the 700px decorative circle
+
 export default function Hero() {
+  const sectionRef  = useRef(null);
+  const metaRef     = useRef(null);
+  const headingRef  = useRef(null);
+  const togetherRef = useRef(null);
+  const orbitDotRef = useRef(null);
+  const angleRef    = useRef(Math.PI * 1.5); // start at top of circle (12-o'clock)
+
+  // ── Fade-in + orbit animation ──────────────────────────────────────────────
+  useGSAP(
+    () => {
+      // Initial visibility (hidden before animation)
+      gsap.set([metaRef.current, headingRef.current, togetherRef.current], {
+        opacity: 0,
+      });
+
+      // Fade-in timeline
+      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+      tl.to(metaRef.current,     { opacity: 1, y: 0, duration: 0.7, delay: 0.15 })
+        .to(headingRef.current,  { opacity: 1, y: 0, duration: 0.85 }, "-=0.35")
+        .to(togetherRef.current, { opacity: 1, scale: 1, rotation: -7, duration: 0.55 }, "-=0.4");
+
+      // Initial state for TOGETHER (scale-down, rotation handled in tween target)
+      gsap.set(togetherRef.current, { scale: 0.88, rotation: -7 });
+
+      // Orbiting dot — runs every tick via gsap.ticker
+      const tick = () => {
+        angleRef.current += 0.006; // radians/frame — adjust for speed
+        const x = Math.cos(angleRef.current) * ORBIT_RADIUS;
+        const y = Math.sin(angleRef.current) * ORBIT_RADIUS;
+        gsap.set(orbitDotRef.current, { x, y });
+      };
+
+      gsap.ticker.add(tick);
+      return () => {
+        tl.kill();
+        gsap.ticker.remove(tick);
+      };
+    },
+    { scope: sectionRef }
+  );
+
+  // ── Scroll-snap: one scroll wheel tick → About section ────────────────────
+  useEffect(() => {
+    let locked = false;
+    let heroVisible = true;
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        heroVisible = entry.isIntersecting && entry.intersectionRatio >= 0.4;
+      },
+      { threshold: 0.4 }
+    );
+    if (sectionRef.current) io.observe(sectionRef.current);
+
+    const onWheel = (e) => {
+      if (!heroVisible || locked || e.deltaY <= 0) return;
+      locked = true;
+      document.getElementById("about")?.scrollIntoView({ behavior: "smooth" });
+      setTimeout(() => { locked = false; }, 1400);
+    };
+
+    window.addEventListener("wheel", onWheel, { passive: true });
+    return () => {
+      window.removeEventListener("wheel", onWheel);
+      io.disconnect();
+    };
+  }, []);
+
   return (
     <section
       id="hero"
+      ref={sectionRef}
       style={{
         backgroundColor: "var(--cream)",
         position: "relative",
         padding: "3rem",
-        minHeight: "820px",
+        minHeight: "100svh",
         overflow: "hidden",
       }}
     >
-      {/* Decorative circle outline — top right (no fill, just border) */}
+      {/* ── Decorative circle outline ─────────────────────────────────────── */}
       <div
         aria-hidden="true"
         style={{
           position: "absolute",
           top: "5rem",
           right: "-120px",
-          width: "700px",
-          height: "700px",
+          width: `${ORBIT_RADIUS * 2}px`,
+          height: `${ORBIT_RADIUS * 2}px`,
           borderRadius: "50%",
           border: "1px solid rgba(13,13,13,0.2)",
           pointerEvents: "none",
         }}
       />
 
-      {/* Decorative blue dot — upper area */}
+      {/* ── Orbit container — same origin as circle ────────────────────────
+          Center anchor sits at the geometric centre of the decorative ring.
+          The dot is placed at (0,0) = centre, then GSAP moves it via x/y.  */}
       <div
         aria-hidden="true"
         style={{
           position: "absolute",
-          top: "19%",
-          right: "31%",
-          width: "12px",
-          height: "12px",
-          borderRadius: "50%",
-          backgroundColor: "var(--blue)",
+          top: "5rem",
+          right: "-120px",
+          width: `${ORBIT_RADIUS * 2}px`,
+          height: `${ORBIT_RADIUS * 2}px`,
+          pointerEvents: "none",
         }}
-      />
+      >
+        {/* Anchor at circle centre */}
+        <div
+          style={{
+            position: "absolute",
+            left: "50%",
+            top: "50%",
+            width: 0,
+            height: 0,
+          }}
+        >
+          <div
+            ref={orbitDotRef}
+            style={{
+              position: "absolute",
+              width: "12px",
+              height: "12px",
+              borderRadius: "50%",
+              backgroundColor: "var(--blue)",
+              transform: "translate(-50%, -50%)",
+            }}
+          />
+        </div>
+      </div>
 
-      {/* Decorative blue dot — left side */}
+      {/* ── Static accent dot ─────────────────────────────────────────────── */}
       <div
         aria-hidden="true"
         style={{
@@ -52,9 +151,11 @@ export default function Hero() {
           height: "8px",
           borderRadius: "50%",
           backgroundColor: "var(--blue)",
+          pointerEvents: "none",
         }}
       />
 
+      {/* ── Content ───────────────────────────────────────────────────────── */}
       <div
         style={{
           position: "relative",
@@ -64,6 +165,7 @@ export default function Hero() {
       >
         {/* Top meta row */}
         <div
+          ref={metaRef}
           style={{
             display: "flex",
             justifyContent: "space-between",
@@ -98,10 +200,11 @@ export default function Hero() {
           </p>
         </div>
 
-        {/* Main heading block */}
+        {/* Main heading */}
         <div
+          ref={headingRef}
           style={{
-            marginTop: "6rem",
+            // marginTop: "4rem",
             maxWidth: "1500px",
             position: "relative",
           }}
@@ -121,8 +224,9 @@ export default function Hero() {
             <span>COMPUTE LOUD.</span>
           </h1>
 
-          {/* TOGETHER — absolute, italic, rotated, blue */}
+          {/* TOGETHER */}
           <span
+            ref={togetherRef}
             aria-hidden="true"
             style={{
               position: "absolute",
@@ -133,7 +237,6 @@ export default function Hero() {
               fontWeight: 900,
               color: "var(--blue)",
               letterSpacing: "-0.06em",
-              transform: "rotate(-7deg)",
               transformOrigin: "center center",
               whiteSpace: "nowrap",
               pointerEvents: "none",
@@ -141,145 +244,19 @@ export default function Hero() {
           >
             TOGETHER
           </span>
-          {/* Accessible version of TOGETHER for screen readers */}
           <span className="sr-only">Together</span>
-        </div>
-
-        {/* Bottom row: description + scroll indicator */}
-        <div
-          style={{
-            display: "flex",
-            marginTop: "4rem",
-            justifyContent: "space-between",
-            alignItems: "flex-end",
-            flexWrap: "wrap",
-            gap: "2rem",
-          }}
-        >
-          {/* Left: body + CTAs */}
-          <div style={{ maxWidth: "36rem" }}>
-            <p
-              style={{
-                fontSize: "1.25rem",
-                lineHeight: 1.6,
-                color: "var(--black)",
-              }}
-            >
-              A student-led community building curious minds, bold ideas, and
-              the future of computing.
-            </p>
-            <div
-              style={{
-                display: "flex",
-                marginTop: "2rem",
-                alignItems: "center",
-                gap: "1.5rem",
-                flexWrap: "wrap",
-              }}
-            >
-              <a
-                href="#about"
-                style={{
-                  display: "inline-block",
-                  fontWeight: 700,
-                  backgroundColor: "var(--blue)",
-                  color: "var(--white)",
-                  fontSize: "0.75rem",
-                  letterSpacing: "0.16em",
-                  textTransform: "uppercase",
-                  padding: "1.5rem 1.75rem",
-                  borderRadius: 0,
-                  textDecoration: "none",
-                  transition: "opacity 0.2s",
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.85")}
-                onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
-              >
-                EXPLORE ACE
-              </a>
-              <a
-                href="#members"
-                style={{
-                  fontWeight: 700,
-                  fontSize: "0.75rem",
-                  letterSpacing: "0.14em",
-                  textTransform: "uppercase",
-                  color: "var(--black)",
-                  textDecoration: "none",
-                  transition: "opacity 0.2s",
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.5")}
-                onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
-              >
-                MEET THE COMMUNITY ↗
-              </a>
-            </div>
-          </div>
-
-          {/* Right: scroll indicator */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "0.75rem",
-              fontWeight: 700,
-              fontSize: "0.75rem",
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              color: "var(--black)",
-            }}
-            aria-label="Scroll to discover"
-          >
-            <div
-              aria-hidden="true"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                width: "32px",
-                height: "32px",
-                borderRadius: "50%",
-                border: "1px solid var(--black)",
-                flexShrink: 0,
-              }}
-            >
-              {/* Arrow Down SVG */}
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                <path
-                  d="M8 3v10M8 13L4 9M8 13l4-4"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-            <span>SCROLL TO DISCOVER</span>
-          </div>
         </div>
       </div>
 
       <style>{`
         .sr-only {
           position: absolute;
-          width: 1px;
-          height: 1px;
-          padding: 0;
-          margin: -1px;
+          width: 1px; height: 1px;
+          padding: 0; margin: -1px;
           overflow: hidden;
           clip: rect(0,0,0,0);
           white-space: nowrap;
           border-width: 0;
-        }
-        @media (max-width: 640px) {
-          /* TOGETHER goes below heading on small screens to avoid overlap */
-          #hero .together-tag {
-            position: static !important;
-            display: block;
-            transform: none !important;
-            margin-top: 1rem;
-            font-size: clamp(2rem, 10vw, 4rem) !important;
-          }
         }
       `}</style>
     </section>

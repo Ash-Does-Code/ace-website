@@ -2,18 +2,11 @@
 
 import { members } from "@/data/members";
 
-const colorMap = {
-  blue: "var(--blue)",
-  black: "var(--black)",
-  yellow: "var(--yellow)",
-  salmon: "var(--salmon)",
-};
-
-const textColorMap = {
-  blue: "var(--white)",
-  black: "var(--white)",
-  yellow: "var(--black)",
-  salmon: "var(--white)",
+const cardColors = {
+  blue:   { bg: "#2D5BFF", color: "#ffffff" },
+  black:  { bg: "#111111", color: "#F4F0E8" },
+  yellow: { bg: "#F2D66B", color: "#111111" },
+  salmon: { bg: "#E97960", color: "#111111" },
 };
 
 export default function Members() {
@@ -22,180 +15,193 @@ export default function Members() {
       id="members"
       style={{
         backgroundColor: "var(--cream)",
-        padding: "clamp(4rem, 8vw, 8rem) clamp(1.25rem, 4vw, 2.5rem)",
+        padding: "8rem 3rem",
       }}
     >
-      {/* Section header */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "flex-start",
-          justifyContent: "space-between",
-          marginBottom: "clamp(2.5rem, 5vw, 4rem)",
-          flexWrap: "wrap",
-          gap: "1rem",
-        }}
-      >
-        <div>
+      <div style={{ maxWidth: "1760px", margin: "0 auto" }}>
+
+        {/* ── Section header: 3-col grid ─────────────────────────────────── */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "120px 1fr auto",
+            alignItems: "flex-end",
+            gap: "2rem",
+          }}
+          className="members-header"
+        >
+          {/* Number */}
           <div
             style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "1rem",
-              marginBottom: "1rem",
+              fontWeight: 900,
+              color: "var(--blue)",
+              fontSize: "3rem",
+              lineHeight: 1,
             }}
           >
-            <span
-              className="text-display"
-              style={{ fontSize: "1.125rem", color: "var(--black)" }}
-            >
-              03
-            </span>
-            <span
-              className="text-label"
-              style={{ opacity: 0.5, fontSize: "0.625rem" }}
+            03
+          </div>
+
+          {/* Label + heading */}
+          <div>
+            <p
+              style={{
+                fontWeight: 700,
+                fontSize: "0.75rem",
+                letterSpacing: "0.18em",
+                textTransform: "uppercase",
+                color: "var(--black)",
+              }}
             >
               Meet the Team
-            </span>
+            </p>
+            <h2
+              style={{
+                fontSize: "clamp(4rem, 8vw, 9rem)",
+                fontWeight: 900,
+                textTransform: "uppercase",
+                lineHeight: 1,
+                letterSpacing: "-0.07em",
+                marginTop: "1.5rem",
+                color: "var(--black)",
+              }}
+            >
+              The Humans of ACE.
+            </h2>
           </div>
-          <h2
-            className="text-display"
+
+          {/* Tagline */}
+          <p
             style={{
-              fontSize: "clamp(2.5rem, 7vw, 7rem)",
+              fontWeight: 700,
+              fontSize: "1.125rem",
+              maxWidth: "16rem",
               color: "var(--black)",
-              lineHeight: 0.92,
+              lineHeight: 1.5,
             }}
+            className="members-tagline"
           >
-            The Humans
+            Different disciplines.
             <br />
-            of ACE.
-          </h2>
+            One curious community.
+          </p>
         </div>
 
-        <p
+        {/* ── Member card grid ───────────────────────────────────────────── */}
+        <div
           style={{
-            fontSize: "0.8125rem",
-            lineHeight: 1.6,
-            maxWidth: "22ch",
-            opacity: 0.6,
-            alignSelf: "flex-end",
+            display: "grid",
+            gridTemplateColumns: "repeat(3, 1fr)",
+            columnGap: "1.5rem",
+            rowGap: "4rem",
+            marginTop: "5rem",
           }}
+          className="members-grid"
         >
-          Different disciplines.
-          <br />
-          One curious community.
-        </p>
-      </div>
+          {members.map((member) => {
+            const { bg, color } = cardColors[member.color] || cardColors.black;
+            return (
+              <article
+                key={member.number}
+                style={{ paddingTop: member.offset ? "4rem" : "0" }}
+              >
+                {/* Coloured card */}
+                <div
+                  style={{
+                    backgroundColor: bg,
+                    color: color,
+                    fontWeight: 900,
+                    fontSize: "3.75rem",    /* text-6xl */
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "flex-end",
+                    padding: "1.5rem",
+                    height: "20rem",        /* h-80 */
+                  }}
+                >
+                  <span>{member.initials}</span>
+                  <span style={{ fontSize: "6rem" /* text-8xl */ }}>
+                    {member.number}
+                  </span>
+                </div>
 
-      {/* Member grid */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(min(220px, 100%), 1fr))",
-          gap: "2px",
-        }}
-      >
-        {members.map((member) => (
-          <MemberCard key={member.number} member={member} />
-        ))}
-      </div>
+                {/* Role label */}
+                <p
+                  style={{
+                    fontWeight: 700,
+                    fontSize: "0.75rem",
+                    letterSpacing: "0.16em",
+                    textTransform: "uppercase",
+                    marginTop: "1.25rem",
+                    color: "var(--black)",
+                  }}
+                >
+                  {member.number} / {member.name} / {member.role}
+                </p>
 
-      {/* See all members */}
-      <div style={{ marginTop: "2rem" }}>
+                {/* Description */}
+                <p
+                  style={{
+                    fontSize: "1.125rem",
+                    marginTop: "0.75rem",
+                    color: "var(--black)",
+                    lineHeight: 1.6,
+                  }}
+                >
+                  {member.description}
+                </p>
+              </article>
+            );
+          })}
+        </div>
+
+        {/* ── See all members ─────────────────────────────────────────────── */}
         <a
-          href="#"
+          href="#footer"
           style={{
+            fontWeight: 700,
+            color: "var(--blue)",
             fontSize: "0.75rem",
-            fontWeight: 600,
-            letterSpacing: "0.08em",
+            letterSpacing: "0.16em",
             textTransform: "uppercase",
-            color: "var(--black)",
+            display: "inline-block",
+            marginTop: "4rem",
             textDecoration: "none",
-            opacity: 0.5,
-            borderBottom: "1px solid rgba(13,13,13,0.4)",
-            paddingBottom: "2px",
             transition: "opacity 0.2s",
           }}
-          onMouseEnter={(e) => (e.currentTarget.style.opacity = "1")}
-          onMouseLeave={(e) => (e.currentTarget.style.opacity = "0.5")}
+          onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.6")}
+          onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
         >
-          See All Members →
+          SEE ALL MEMBERS ↗
         </a>
       </div>
+
+      <style>{`
+        /* Tablet: 2 cols, hide tagline from header */
+        @media (max-width: 900px) {
+          .members-header {
+            grid-template-columns: 80px 1fr !important;
+          }
+          .members-tagline {
+            display: none;
+          }
+          .members-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+          }
+        }
+        /* Mobile: 1 col, remove stagger offset */
+        @media (max-width: 540px) {
+          .members-header {
+            grid-template-columns: 60px 1fr !important;
+          }
+          .members-grid {
+            grid-template-columns: 1fr !important;
+          }
+          .members-grid article {
+            padding-top: 0 !important;
+          }
+        }
+      `}</style>
     </section>
-  );
-}
-
-function MemberCard({ member }) {
-  const bg = colorMap[member.color] || "var(--black)";
-  const fg = textColorMap[member.color] || "var(--white)";
-
-  return (
-    <div
-      style={{
-        backgroundColor: bg,
-        color: fg,
-        padding: "1.5rem",
-        aspectRatio: "1 / 1",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
-        position: "relative",
-        overflow: "hidden",
-        minHeight: "180px",
-      }}
-    >
-      {/* Large initials */}
-      <div
-        aria-hidden="true"
-        className="text-display"
-        style={{
-          fontSize: "clamp(2.5rem, 5vw, 4rem)",
-          opacity: 1,
-          lineHeight: 1,
-        }}
-      >
-        {member.initials}
-      </div>
-
-      {/* Number (top right) */}
-      <span
-        aria-hidden="true"
-        className="text-display"
-        style={{
-          position: "absolute",
-          top: "1.5rem",
-          right: "1.5rem",
-          fontSize: "clamp(1.5rem, 3.5vw, 2.5rem)",
-          opacity: 0.35,
-          lineHeight: 1,
-        }}
-      >
-        {member.number}
-      </span>
-
-      {/* Bottom info */}
-      <div>
-        <p
-          className="text-label"
-          style={{
-            fontSize: "0.5625rem",
-            opacity: 0.65,
-            marginBottom: "0.375rem",
-          }}
-        >
-          {member.number} / {member.name} / {member.role}
-        </p>
-        <p
-          style={{
-            fontSize: "0.75rem",
-            lineHeight: 1.45,
-            opacity: 0.85,
-          }}
-        >
-          {member.description}
-        </p>
-      </div>
-    </div>
   );
 }

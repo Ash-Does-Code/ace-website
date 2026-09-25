@@ -1,15 +1,17 @@
 /**
- * Team members data — matches the landing page grid.
+ * Team members data — matches the ACE landing page reference.
  * Colors: 'blue' | 'black' | 'yellow' | 'salmon'
+ * offset: true → card gets top padding (staggered row effect)
  */
 export const members = [
   {
     initials: "AM",
     number: "01",
-    name: "Sarah Mason",
+    name: "Aarav Menon",
     role: "President",
     description: "Strategy, systems, and making impossible ideas feel practical.",
     color: "blue",
+    offset: false,
   },
   {
     initials: "DS",
@@ -18,22 +20,25 @@ export const members = [
     role: "Vice President",
     description: "Community energy, events, and a very full calendar.",
     color: "black",
+    offset: true,
   },
   {
     initials: "RR",
     number: "03",
-    name: "Nithin Rao",
+    name: "Ritwik Rao",
     role: "Tech Lead",
     description: "Turning experiments into things people can use.",
     color: "yellow",
+    offset: false,
   },
   {
     initials: "SK",
     number: "04",
-    name: "Dana Khan",
+    name: "Sana Khan",
     role: "Design Lead",
     description: "Interfaces, identities, and the details between.",
     color: "salmon",
+    offset: false,
   },
   {
     initials: "ND",
@@ -42,6 +47,7 @@ export const members = [
     role: "Outreach Lead",
     description: "Connecting ACE to the world beyond campus.",
     color: "blue",
+    offset: true,
   },
   {
     initials: "MI",
@@ -50,5 +56,6 @@ export const members = [
     role: "Operations",
     description: "Keeping the people and projects moving.",
     color: "black",
+    offset: false,
   },
 ];
