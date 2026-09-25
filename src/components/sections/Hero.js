@@ -5,204 +5,283 @@ export default function Hero() {
     <section
       id="hero"
       style={{
-        position: "relative",
-        minHeight: "100svh",
         backgroundColor: "var(--cream)",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "flex-end",
-        padding: "0 clamp(1.25rem, 4vw, 2.5rem)",
-        paddingBottom: "clamp(3rem, 6vw, 5rem)",
+        position: "relative",
+        padding: "3rem",
+        minHeight: "820px",
         overflow: "hidden",
       }}
     >
-      {/* Top meta row */}
-      <div
-        style={{
-          position: "absolute",
-          top: "52px",
-          left: 0,
-          right: 0,
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "flex-start",
-          padding: "1.25rem clamp(1.25rem, 4vw, 2.5rem)",
-          borderBottom: "1px solid rgba(13,13,13,0.15)",
-        }}
-      >
-        <div style={{ lineHeight: 1.4 }}>
-          <p className="text-label" style={{ opacity: 0.5, fontSize: "0.625rem" }}>
-            Association of Computing Engineers
-          </p>
-          <p className="text-label" style={{ opacity: 0.5, fontSize: "0.625rem" }}>
-            2024–25
-          </p>
-        </div>
-        <div
-          style={{
-            display: "flex",
-            gap: "0.25rem",
-            flexWrap: "wrap",
-            justifyContent: "flex-end",
-          }}
-        >
-          {["Coders", "Creators", "Collaborators"].map((tag, i) => (
-            <span
-              key={tag}
-              className="text-label"
-              style={{
-                fontSize: "0.625rem",
-                opacity: 0.5,
-              }}
-            >
-              {tag}
-              {i < 2 ? " /" : ""}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {/* Decorative dot */}
+      {/* Decorative circle outline — top right (no fill, just border) */}
       <div
         aria-hidden="true"
         style={{
           position: "absolute",
-          top: "20%",
-          right: "28%",
-          width: "6px",
-          height: "6px",
+          top: "5rem",
+          right: "-120px",
+          width: "700px",
+          height: "700px",
+          borderRadius: "50%",
+          border: "1px solid rgba(13,13,13,0.2)",
+          pointerEvents: "none",
+        }}
+      />
+
+      {/* Decorative blue dot — upper area */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          top: "19%",
+          right: "31%",
+          width: "12px",
+          height: "12px",
           borderRadius: "50%",
           backgroundColor: "var(--blue)",
         }}
       />
 
-      {/* Display heading */}
-      <div style={{ position: "relative", zIndex: 1, marginBottom: "clamp(2rem, 4vw, 3rem)" }}>
-        <h1
-          className="text-display"
-          style={{
-            fontSize: "clamp(4.5rem, 16vw, 18rem)",
-            lineHeight: 0.88,
-            color: "var(--black)",
-          }}
-        >
-          <span style={{ display: "block" }}>ACE</span>
-          <span style={{ display: "block" }}>
-            COMPU
-            <span style={{ color: "var(--blue)" }}>TE</span>
-          </span>
-          <span style={{ display: "flex", alignItems: "baseline", flexWrap: "wrap", gap: "0.15em" }}>
-            <span>LOUD.</span>
-            <span
-              style={{
-                color: "var(--blue)",
-                fontSize: "0.45em",
-                fontWeight: 900,
-                letterSpacing: "0.08em",
-                marginLeft: "0.25em",
-                alignSelf: "flex-end",
-                paddingBottom: "0.1em",
-              }}
-            >
-              TOGETHER
-            </span>
-          </span>
-        </h1>
-      </div>
+      {/* Decorative blue dot — left side */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          top: "43%",
+          left: "9%",
+          width: "8px",
+          height: "8px",
+          borderRadius: "50%",
+          backgroundColor: "var(--blue)",
+        }}
+      />
 
-      {/* Bottom row */}
       <div
         style={{
-          display: "flex",
-          alignItems: "flex-end",
-          justifyContent: "space-between",
-          flexWrap: "wrap",
-          gap: "1.5rem",
+          position: "relative",
+          maxWidth: "1760px",
+          margin: "0 auto",
         }}
       >
-        <div>
-          <p
-            style={{
-              fontSize: "clamp(0.8125rem, 1.5vw, 1rem)",
-              lineHeight: 1.55,
-              maxWidth: "28rem",
-              marginBottom: "1.5rem",
-              opacity: 0.8,
-            }}
-          >
-            A student-led community building curious minds, bold ideas,
-            and the future of computing.
-          </p>
-          <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
-            <a
-              href="#about"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                padding: "0.625rem 1.25rem",
-                backgroundColor: "var(--blue)",
-                color: "var(--white)",
-                fontSize: "0.75rem",
-                fontWeight: 600,
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                textDecoration: "none",
-                borderRadius: "2px",
-                transition: "opacity 0.2s",
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.85")}
-              onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
-            >
-              Explore ACE
-            </a>
-            <a
-              href="#members"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                padding: "0.625rem 1.25rem",
-                backgroundColor: "transparent",
-                color: "var(--black)",
-                fontSize: "0.75rem",
-                fontWeight: 600,
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                textDecoration: "none",
-                border: "1.5px solid rgba(13,13,13,0.3)",
-                borderRadius: "2px",
-                transition: "border-color 0.2s",
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.borderColor = "var(--black)")}
-              onMouseLeave={(e) => (e.currentTarget.style.borderColor = "rgba(13,13,13,0.3)")}
-            >
-              Meet the Community
-            </a>
-          </div>
-        </div>
-
-        {/* Scroll indicator */}
+        {/* Top meta row */}
         <div
           style={{
             display: "flex",
-            alignItems: "center",
-            gap: "0.5rem",
-            opacity: 0.45,
+            justifyContent: "space-between",
+            alignItems: "flex-start",
           }}
-          aria-hidden="true"
         >
-          <span
+          <p
             style={{
-              width: "24px",
-              height: "1px",
-              backgroundColor: "var(--black)",
-              display: "inline-block",
+              fontWeight: 700,
+              fontSize: "0.75rem",
+              lineHeight: 1.6,
+              letterSpacing: "0.16em",
+              textTransform: "uppercase",
+              color: "var(--black)",
             }}
-          />
-          <span className="text-label" style={{ fontSize: "0.625rem" }}>
-            Scroll to Discover
+          >
+            Association of Computing Engineers
+            <br />
+            2024—25
+          </p>
+          <p
+            style={{
+              fontWeight: 700,
+              fontSize: "0.75rem",
+              letterSpacing: "0.16em",
+              textTransform: "uppercase",
+              textAlign: "right",
+              color: "var(--black)",
+            }}
+          >
+            Coders / Creators / Collaborators
+          </p>
+        </div>
+
+        {/* Main heading block */}
+        <div
+          style={{
+            marginTop: "6rem",
+            maxWidth: "1500px",
+            position: "relative",
+          }}
+        >
+          <h1
+            style={{
+              fontSize: "clamp(9rem, 20vw, 22rem)",
+              fontWeight: 900,
+              textTransform: "uppercase",
+              lineHeight: 0.78,
+              letterSpacing: "-0.09em",
+              color: "var(--black)",
+            }}
+          >
+            ACE
+            <br />
+            <span>COMPUTE LOUD.</span>
+          </h1>
+
+          {/* TOGETHER — absolute, italic, rotated, blue */}
+          <span
+            aria-hidden="true"
+            style={{
+              position: "absolute",
+              top: "54%",
+              right: "17%",
+              fontSize: "clamp(3rem, 6vw, 7rem)",
+              fontStyle: "italic",
+              fontWeight: 900,
+              color: "var(--blue)",
+              letterSpacing: "-0.06em",
+              transform: "rotate(-7deg)",
+              transformOrigin: "center center",
+              whiteSpace: "nowrap",
+              pointerEvents: "none",
+            }}
+          >
+            TOGETHER
           </span>
+          {/* Accessible version of TOGETHER for screen readers */}
+          <span className="sr-only">Together</span>
+        </div>
+
+        {/* Bottom row: description + scroll indicator */}
+        <div
+          style={{
+            display: "flex",
+            marginTop: "4rem",
+            justifyContent: "space-between",
+            alignItems: "flex-end",
+            flexWrap: "wrap",
+            gap: "2rem",
+          }}
+        >
+          {/* Left: body + CTAs */}
+          <div style={{ maxWidth: "36rem" }}>
+            <p
+              style={{
+                fontSize: "1.25rem",
+                lineHeight: 1.6,
+                color: "var(--black)",
+              }}
+            >
+              A student-led community building curious minds, bold ideas, and
+              the future of computing.
+            </p>
+            <div
+              style={{
+                display: "flex",
+                marginTop: "2rem",
+                alignItems: "center",
+                gap: "1.5rem",
+                flexWrap: "wrap",
+              }}
+            >
+              <a
+                href="#about"
+                style={{
+                  display: "inline-block",
+                  fontWeight: 700,
+                  backgroundColor: "var(--blue)",
+                  color: "var(--white)",
+                  fontSize: "0.75rem",
+                  letterSpacing: "0.16em",
+                  textTransform: "uppercase",
+                  padding: "1.5rem 1.75rem",
+                  borderRadius: 0,
+                  textDecoration: "none",
+                  transition: "opacity 0.2s",
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.85")}
+                onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
+              >
+                EXPLORE ACE
+              </a>
+              <a
+                href="#members"
+                style={{
+                  fontWeight: 700,
+                  fontSize: "0.75rem",
+                  letterSpacing: "0.14em",
+                  textTransform: "uppercase",
+                  color: "var(--black)",
+                  textDecoration: "none",
+                  transition: "opacity 0.2s",
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.5")}
+                onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
+              >
+                MEET THE COMMUNITY ↗
+              </a>
+            </div>
+          </div>
+
+          {/* Right: scroll indicator */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.75rem",
+              fontWeight: 700,
+              fontSize: "0.75rem",
+              letterSpacing: "0.14em",
+              textTransform: "uppercase",
+              color: "var(--black)",
+            }}
+            aria-label="Scroll to discover"
+          >
+            <div
+              aria-hidden="true"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: "32px",
+                height: "32px",
+                borderRadius: "50%",
+                border: "1px solid var(--black)",
+                flexShrink: 0,
+              }}
+            >
+              {/* Arrow Down SVG */}
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path
+                  d="M8 3v10M8 13L4 9M8 13l4-4"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+            <span>SCROLL TO DISCOVER</span>
+          </div>
         </div>
       </div>
+
+      <style>{`
+        .sr-only {
+          position: absolute;
+          width: 1px;
+          height: 1px;
+          padding: 0;
+          margin: -1px;
+          overflow: hidden;
+          clip: rect(0,0,0,0);
+          white-space: nowrap;
+          border-width: 0;
+        }
+        @media (max-width: 640px) {
+          /* TOGETHER goes below heading on small screens to avoid overlap */
+          #hero .together-tag {
+            position: static !important;
+            display: block;
+            transform: none !important;
+            margin-top: 1rem;
+            font-size: clamp(2rem, 10vw, 4rem) !important;
+          }
+        }
+      `}</style>
     </section>
   );
 }
